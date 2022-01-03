@@ -18,6 +18,11 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class MainSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+
+    private   final String ENCODED_PASSWORD = new BCryptPasswordEncoder().encode("admin@123");//bob's password
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -37,7 +42,8 @@ public class MainSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                .antMatchers("/admin")
-               .hasRole("ADMIN")
+                .hasAnyRole("ADMIN", "USER")
+
             .and()
                 .authorizeRequests()
                 .antMatchers("/product")
@@ -56,7 +62,7 @@ public class MainSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-//    //-- 1. from memory
+    //-- 1. from memory
 //        auth.inMemoryAuthentication()
 //                .passwordEncoder(passwordEncoder())
 //                .withUser("user")
@@ -65,18 +71,18 @@ public class MainSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
 //                .withUser("2")
 //                .password(new BCryptPasswordEncoder().encode("2"))
-//                .roles("AUTHOR") ;
+//                .roles("ADMIN") ;
 
 
         //    //-- 2.  from database
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("select username, password, enabled  from users where username=?")
-                .authoritiesByUsernameQuery("select username, authority  from authorities where username=?")
-                .passwordEncoder(new BCryptPasswordEncoder());
+//        auth.jdbcAuthentication().dataSource(dataSource)
+//                .usersByUsernameQuery("select username, password, enabled  from users where username=?")
+//                .authoritiesByUsernameQuery("select username, authority  from authorities where username=?")
+//                .passwordEncoder(new BCryptPasswordEncoder());
 
         //    //-- 3. custom
 
-//        auth.authenticationProvider(authProvider);
+        auth.authenticationProvider(authProvider);
 
 
     }

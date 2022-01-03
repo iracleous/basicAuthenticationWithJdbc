@@ -7,7 +7,7 @@ public class PasswordEncoderUtil {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encoded = encoder.encode("admin@123");//bob's password
         System.out.println(encoded);
-        encoded = encoder.encode("234");//sara's password
+        encoded = encoder.encode("admin@123");//sara's password
         System.out.println(encoded);
     }
 }

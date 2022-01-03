@@ -24,7 +24,6 @@ public class BasicApiController {
 
     @GetMapping("/ping")
     public String getPing(){
-
         return "It works";
     }
 
