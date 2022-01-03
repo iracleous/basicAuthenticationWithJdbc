@@ -50,10 +50,13 @@ public class MainSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private CustomAuthenticationProvider authProvider;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-//
+//    //-- 1. from memory
 //        auth.inMemoryAuthentication()
 //                .passwordEncoder(passwordEncoder())
 //                .withUser("user")
@@ -64,10 +67,18 @@ public class MainSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .password(new BCryptPasswordEncoder().encode("2"))
 //                .roles("AUTHOR") ;
 
+
+        //    //-- 2.  from database
         auth.jdbcAuthentication().dataSource(dataSource)
                 .usersByUsernameQuery("select username, password, enabled  from users where username=?")
                 .authoritiesByUsernameQuery("select username, authority  from authorities where username=?")
                 .passwordEncoder(new BCryptPasswordEncoder());
+
+        //    //-- 3. custom
+
+//        auth.authenticationProvider(authProvider);
+
+
     }
 
     @Bean
